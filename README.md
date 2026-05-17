@@ -19,29 +19,23 @@ The application includes:
 
 🛠️ **Technologies Used** <br>
 *Backend* <br>
-ASP.NET MVC
-C#
-Entity Framework Core
-ASP.NET Identity
+ASP.NET MVC <br>
+C# <br>
+Entity Framework Core <br>
+ASP.NET Identity <br>
 *Frontend* <br>
-HTML5
-CSS3
-Bootstrap
-JavaScript
+HTML5 <br>
+CSS3 <br>
+Bootstrap <br>
+JavaScript <br>
 *Database* <br>
-SQL Server
+SQL Server<br>
 **Additional Tools** <br>
-Stripe Payment API (or any external payment gateway)
-SweetAlert / Toast Notifications
-Session / Local Storage
+Stripe Payment API (or any external payment gateway) <br>
+SweetAlert / Toast Notifications <br>
+Session / Local Storage <br>
 
 ⭐ **Team Members**
 - Farah Masri (Scrum Master)
 - Laila Harb (Product owner)
 - Ibrahim Abu Othman.
-CartItems
-Wishlists
-Testimonials
-Comments
-Ratings
-Payments
