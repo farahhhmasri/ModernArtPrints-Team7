@@ -1,0 +1,181 @@
+﻿@model ModernArtPrints.Models.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<section class="checkout-premium-page art-page-bg">
+    <div class="container">
+
+        <div class="checkout-header art-fade-down">
+            <span class="section-label">Secure Checkout</span>
+            <h1>Checkout</h1>
+            <p>Review your billing details and order summary before completing payment.</p>
+        </div>
+
+        <div class="checkout-layout">
+
+            <!-- LEFT: Billing Details -->
+            <div class="checkout-card">
+
+                <h2>Billing Details</h2>
+                <p class="checkout-card-subtitle">
+                    These details are connected to your account and will be used for your order information.
+                </p>
+
+                <div class="checkout-info-grid">
+
+                    <div class="checkout-info-box">
+                        <span class="checkout-info-label">Full Name</span>
+                        <div class="checkout-info-value">
+                            @(string.IsNullOrEmpty(Model.FullName) ? "Not provided" : Model.FullName)
+                        </div>
+                    </div>
+
+                    <div class="checkout-info-box">
+                        <span class="checkout-info-label">Email</span>
+                        <div class="checkout-info-value">
+                            @(string.IsNullOrEmpty(Model.Email) ? "Not provided" : Model.Email)
+                        </div>
+                    </div>
+
+                    <div class="checkout-info-box">
+                        <span class="checkout-info-label">Phone Number</span>
+                        <div class="checkout-info-value">
+                            @(string.IsNullOrEmpty(Model.PhoneNumber) ? "Not provided" : Model.PhoneNumber)
+                        </div>
+                    </div>
+
+                    <div class="checkout-info-box">
+                        <span class="checkout-info-label">Country</span>
+                        <div class="checkout-info-value">
+                            Jordan
+                        </div>
+                    </div>
+
+                    <div class="checkout-info-box full">
+                        <span class="checkout-info-label">Address</span>
+                        <div class="checkout-info-value">
+                            @(string.IsNullOrEmpty(Model.Address) ? "Not provided" : Model.Address)
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="checkout-payment-box">
+                    <h3>Payment Method</h3>
+                    <p>
+                        You will be redirected to Stripe to complete your payment securely using your card.
+                    </p>
+                </div>
+
+                <p class="checkout-note">
+                    Please make sure your billing information is correct before proceeding.
+                </p>
+
+            </div>
+
+            <!-- RIGHT: Order Summary -->
+            <div class="checkout-card">
+
+                <h2>Your Order</h2>
+                <p class="checkout-card-subtitle">
+                    Summary of the products currently in your cart.
+                </p>
+
+                @foreach (var item in Model.CartItems)
+                {
+                    var productName = item.Product?.Name ?? "Product";
+                    var productPrice = item.Product?.Price ?? 0;
+                    var lineTotal = productPrice * item.Quantity;
+
+                    <div class="checkout-order-item">
+
+                        <div>
+                            <div class="checkout-product-name">
+                                @productName
+                            </div>
+
+                            <div class="checkout-product-meta">
+                                Unit Price: $@productPrice.ToString("0.00")
+                                × Qty: @item.Quantity
+                            </div>
+                        </div>
+
+                        <div class="checkout-product-total">
+                            $@lineTotal.ToString("0.00")
+                        </div>
+
+                    </div>
+                }
+
+                <div class="checkout-summary-lines">
+
+                    <div class="checkout-summary-line">
+                        <span>Subtotal</span>
+                        <strong>$@Model.Subtotal.ToString("0.00")</strong>
+                    </div>
+
+                    @if (Model.DiscountAmount > 0 || Model.HasFreeShipping)
+                    {
+                        <div class="checkout-summary-line discount">
+                            <strong>
+                                Discount
+                                @if (!string.IsNullOrEmpty(Model.DiscountLabel))
+                                {
+                                    <small>(@Model.DiscountLabel)</small>
+                                }
+                            </strong>
+
+                            <span>
+                                @if (Model.DiscountAmount > 0)
+                                {
+                                    <strong>-$@Model.DiscountAmount.ToString("0.00")</strong>
+                                }
+                                else
+                                {
+                                    <strong>Free Shipping</strong>
+                                }
+                            </span>
+                        </div>
+                    }
+
+                    <div class="checkout-summary-line">
+                        <span>Shipping</span>
+                        <strong>
+                            @if (Model.ShippingCost == 0)
+                            {
+                                <span style="color:#1f9d55;">Free</span>
+                            }
+                            else
+                            {
+                                <span>$@Model.ShippingCost.ToString("0.00")</span>
+                            }
+                        </strong>
+                    </div>
+
+                    <div class="checkout-summary-total">
+                        <span>Total</span>
+                        <span>$@Model.Total.ToString("0.00")</span>
+                    </div>
+
+                </div>
+
+                <form method="post" asp-action="CreateCheckoutSession">
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit" class="checkout-pay-btn">
+                        Place Order & Pay
+                    </button>
+                </form>
+
+                <p class="checkout-note">
+                    Payments are processed securely through Stripe.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

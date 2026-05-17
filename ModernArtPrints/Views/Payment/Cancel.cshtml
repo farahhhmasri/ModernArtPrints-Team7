@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Payment Cancelled";
+}
+
+<section class="payment-result-page art-page-bg">
+    <div class="container">
+
+        <div class="payment-result-card">
+
+            <div class="payment-result-icon cancel">
+                ×
+            </div>
+
+            <span class="section-label">Payment Cancelled</span>
+
+            <h1>Your Payment Was Cancelled</h1>
+
+            <p>
+                No payment was completed. Your cart is still saved, so you can review your items
+                and try again whenever you are ready.
+            </p>
+
+            <div class="payment-result-note">
+                You can return to your cart, adjust quantities, remove items, or proceed to checkout again.
+            </div>
+
+            <div class="payment-result-actions">
+                <a asp-controller="Cart"
+                   asp-action="Index"
+                   class="payment-result-btn payment-result-primary">
+                    Back to Cart
+                </a>
+
+                <a asp-controller="Product"
+                   asp-action="Shop"
+                   class="payment-result-btn payment-result-outline">
+                    Continue Shopping
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>

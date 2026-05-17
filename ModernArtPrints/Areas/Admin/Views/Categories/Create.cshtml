@@ -1,0 +1,80 @@
+﻿@using ModernArtPrints.Areas.Admin.Models
+
+@model ModernArtPrints.Areas.Admin.Models.CategoryCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Category";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 520px; border-radius: 16px;">
+
+        <div class="card-header bg-white border-0 pt-4 pb-0">
+            <h3 class="fw-bold mb-1">Create Category</h3>
+            <p class="text-muted small mb-0">
+                Add a new category to your store
+            </p>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Create" enctype="multipart/form-data">
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
+
+                <!-- Category Name -->
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-semibold"></label>
+                    <input asp-for="Name"
+                           class="form-control form-control-sm"
+                           placeholder="Enter category name" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-semibold"></label>
+                    <textarea asp-for="Description"
+                              class="form-control form-control-sm"
+                              rows="3"
+                              placeholder="Short category description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-4">
+                    <label asp-for="ImageFile" class="form-label fw-semibold">
+                        Category Image
+                    </label>
+
+                    <input asp-for="ImageFile"
+                           type="file"
+                           class="form-control form-control-sm" />
+
+                    <span asp-validation-for="ImageFile" class="text-danger small"></span>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <a asp-action="Index" class="btn btn-light btn-sm px-4">
+                        Back
+                    </a>
+
+                    <button type="submit" class="btn btn-dark btn-sm px-4">
+                        Create
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

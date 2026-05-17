@@ -1,0 +1,72 @@
+﻿@model ModernArtPrints.Models.Testimonial
+
+@{
+    ViewData["Title"] = "Add Testimonial";
+}
+
+<section class="testimonial-premium-page art-page-bg">
+    <div class="container">
+
+        <div class="testimonial-premium-wrapper">
+
+            <div class="testimonial-premium-header">
+                <span>Your Experience</span>
+                <h1>Add Testimonial</h1>
+                <p>
+                    Share your experience with Havenly and modern art prints.
+                    Your testimonial will appear on the website after admin approval.
+                </p>
+            </div>
+
+            <div class="testimonial-premium-body">
+
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Message" class="form-label">
+                            Your Testimonial
+                        </label>
+
+                        <textarea asp-for="Message"
+                                  class="form-control testimonial-textarea"
+                                  placeholder="Write about your shopping experience, product quality, delivery, or how the artwork looked in your space..."></textarea>
+
+                        <span asp-validation-for="Message" class="text-danger"></span>
+                    </div>
+
+                    <div class="testimonial-tips">
+                        <h5>What can you mention?</h5>
+                        <ul>
+                            <li>The quality of the art print.</li>
+                            <li>Your shopping or checkout experience.</li>
+                            <li>How the artwork looked in your room or space.</li>
+                            <li>Delivery, packaging, or overall satisfaction.</li>
+                        </ul>
+                    </div>
+
+                    <div class="testimonial-actions">
+                        <a asp-controller="Profile"
+                           asp-action="Index"
+                           class="testimonial-back-btn">
+                            Back to Profile
+                        </a>
+
+                        <button type="submit" class="testimonial-submit-btn">
+                            Submit Testimonial
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

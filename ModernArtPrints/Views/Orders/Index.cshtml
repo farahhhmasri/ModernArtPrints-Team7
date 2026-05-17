@@ -1,0 +1,130 @@
+﻿@model IEnumerable<ModernArtPrints.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+<section class="orders-premium-page art-page-bg">
+    <div class="container">
+
+        <div class="orders-header art-fade-down">
+            <span class="section-label">My Orders</span>
+            <h1>Order History</h1>
+            <p>Track your purchased art prints and review delivered products.</p>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-orders-card">
+                <div class="empty-orders-icon">
+                    <i class="bi bi-bag-x"></i>
+                </div>
+
+                <h3>No orders yet</h3>
+                <p>
+                    You have not placed any orders yet.
+                    Explore our collection and start your first order.
+                </p>
+
+                <a asp-controller="Product" asp-action="Shop" class="cart-checkout-btn">
+                    Start Shopping
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="orders-list-card">
+
+                @foreach (var order in Model)
+                {
+                    <div class="order-premium-card">
+
+                        <div class="order-main-info">
+                            <h4>Order #@order.Id</h4>
+
+                            <div class="order-meta">
+                                <span>
+                                    <strong>Date:</strong>
+                                    @order.OrderDate.ToString("dd MMM yyyy")
+                                </span>
+
+                                <span>
+                                    <strong>Discount:</strong>
+                                    @order.DiscountAmount.ToString("0.00") JD
+                                </span>
+
+                                <span>
+                                    <strong>Address:</strong>
+                                    @(string.IsNullOrEmpty(order.ShippingAddress) ? "Not provided" : order.ShippingAddress)
+                                </span>
+
+                                <span>
+                                    <strong>Phone:</strong>
+                                    @(string.IsNullOrEmpty(order.PhoneNumber) ? "Not provided" : order.PhoneNumber)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="order-price">
+                                @order.TotalAmount.ToString("0.00") JD
+                            </div>
+
+                            <div class="order-badges">
+                                <span class="order-status status-@order.OrderStatus.ToString().ToLower()">
+                                    @order.OrderStatus
+                                </span>
+
+                                <span class="payment-status payment-@order.PaymentStatus.ToString().ToLower()">
+                                    @order.PaymentStatus
+                                </span>
+                            </div>
+
+                            <div class="order-actions">
+                                @if (order.OrderStatus == ModernArtPrints.Models.OrderStatus.delivered
+                               && order.PaymentStatus == ModernArtPrints.Models.PaymentStatus.Success)
+                                {
+                                    <a asp-controller="Reviews"
+                                       asp-action="Create"
+                                       asp-route-orderId="@order.Id"
+                                       class="order-action-btn order-review-btn">
+                                        Add Reviews
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="order-disabled-text">
+                                        Reviews available after delivery and payment success
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+</section>

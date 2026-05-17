@@ -1,0 +1,132 @@
+﻿@model ModernArtPrints.ViewModels.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+
+    var profileImage = string.IsNullOrEmpty(Model.CurrentProfileImageUrl)
+        ? "/uploads/users/default-user.png"
+        : Model.CurrentProfileImageUrl;
+}
+
+<section class="profile-premium-page art-page-bg">
+    <div class="container">
+
+        <div class="profile-premium-card">
+
+            <!-- Cover -->
+            <div class="profile-cover"></div>
+
+            <!-- Avatar -->
+            <div class="profile-avatar-wrap">
+                <img src="@profileImage"
+                     alt="Profile Image"
+                     class="profile-premium-img" />
+
+                <h2 class="profile-name">
+                    Edit Profile
+                </h2>
+
+                <p class="profile-email">
+                    Update your personal information and profile image.
+                </p>
+            </div>
+
+            <!-- Body -->
+            <div class="profile-premium-body">
+
+                <div class="section-title text-center mb-4">
+                    <span class="section-label">Profile Settings</span>
+                    <h2>Update Information</h2>
+                    <p>Keep your account details accurate and up to date.</p>
+                </div>
+
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input asp-for="FullName"
+                                       class="form-control"
+                                       placeholder="Full Name" />
+                                <label asp-for="FullName">Full Name</label>
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input asp-for="PhoneNumber"
+                                       class="form-control"
+                                       placeholder="Phone Number" />
+                                <label asp-for="PhoneNumber">Phone Number</label>
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input asp-for="DateOfBirth"
+                                       type="date"
+                                       class="form-control"
+                                       placeholder="Date of Birth" />
+                                <label asp-for="DateOfBirth">Date of Birth</label>
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProfileImage" class="form-label">
+                                Change Profile Image
+                            </label>
+
+                            <input asp-for="ProfileImage"
+                                   type="file"
+                                   accept="image/*"
+                                   class="form-control auth-file-input" />
+
+                            <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <div class="form-floating">
+                                <input asp-for="Address"
+                                       class="form-control"
+                                       placeholder="Address" />
+                                <label asp-for="Address">Address</label>
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="profile-premium-actions">
+
+                        <a asp-area=""
+                           asp-controller="Profile"
+                           asp-action="Index"
+                           class="profile-action-btn profile-action-outline">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                                class="profile-action-btn profile-action-primary border-0">
+                            Save Changes
+                        </button>
+
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

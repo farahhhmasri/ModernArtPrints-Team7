@@ -1,0 +1,211 @@
+﻿@model ModernArtPrints.Models.Product
+
+@{
+    ViewData["Title"] = "Delete Product";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 text-danger">Delete Product</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Products</a></li>
+                    <li class="breadcrumb-item active text-danger">Delete Product</li>
+                </ol>
+            </nav>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+    </div>
+
+    <!-- Warning Alert -->
+    <div class="alert alert-danger d-flex align-items-center shadow-sm mb-4 border-0" role="alert">
+        <i class="fas fa-exclamation-triangle fa-lg me-3"></i>
+        <div>
+            <strong>Warning:</strong> This action cannot be undone. This product will be permanently removed from the store.
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row g-4">
+            <!-- Left Column: General Information -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 overflow-hidden">
+                    <div class="card-header bg-dark text-white py-3 px-4">
+                        <h5 class="mb-0 fw-semibold"><i class="fas fa-info-circle me-2"></i>General Information</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <!-- Name Field -->
+                        <div class="row g-0 border-bottom">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Name</span>
+                                <small class="text-muted">The public name of the product.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                <span class="fs-5 text-secondary">@Model.Name</span>
+                            </div>
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="row g-0 border-bottom">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Description</span>
+                                <small class="text-muted">A brief summary of the product.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                <span class="fs-5 text-secondary">
+                                    @(string.IsNullOrEmpty(Model.Description) ? "No description provided." : Model.Description)
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Price Field -->
+                        <div class="row g-0 border-bottom">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Price</span>
+                                <small class="text-muted">The selling price of the product.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                <span class="badge bg-success fs-5">$@Model.Price</span>
+                            </div>
+                        </div>
+
+                        <!-- Discount Field -->
+                        <div class="row g-0 border-bottom">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Discount</span>
+                                <small class="text-muted">Applied discount code.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                <span class="fs-5 text-secondary">
+                                    @(Model.Discount != null ? Model.Discount.Code : "No discount applied")
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Stock Quantity Field -->
+                        <div class="row g-0 border-bottom">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Stock Quantity</span>
+                                <small class="text-muted">Available units in inventory.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                <span class="badge @(Model.StockQuantity > 10 ? "bg-success" : Model.StockQuantity > 0 ? "bg-warning text-dark" : "bg-danger") fs-5">
+                                    @Model.StockQuantity in stock
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Category Field -->
+                        <div class="row g-0 border-bottom">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Category</span>
+                                <small class="text-muted">Product classification.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                <span class="fs-5 text-secondary">
+                                    @(Model.Category != null ? Model.Category.Name : "Uncategorized")
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Status Field -->
+                        <div class="row g-0 border-bottom">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Status</span>
+                                <small class="text-muted">Whether this product is active.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i>Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6"><i class="fas fa-times-circle me-1"></i>Inactive</span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Created Date Field -->
+                        <div class="row g-0">
+                            <div class="col-md-4 bg-light p-4">
+                                <span class="fw-bold text-dark mb-1 d-block">Created Date</span>
+                                <small class="text-muted">When this product was added.</small>
+                            </div>
+                            <div class="col-md-8 p-4 d-flex align-items-center">
+                                <span class="badge bg-light text-dark border fs-6">
+                                    <i class="far fa-clock me-2"></i>@Model.CreatedAt.ToString("MMM dd, yyyy - hh:mm tt")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Button -->
+                    <div class="card-footer bg-white border-top-0 p-4 d-flex justify-content-between align-items-center">
+                       
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-danger rounded-pill px-5 py-2 fw-semibold"
+                                    onclick="return confirm('FINAL CONFIRMATION: Permanently delete @Model.Name?');">
+                                <i class="fas fa-trash-alt me-2"></i>Yes, Delete
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 py-2 ms-2">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Media -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 overflow-hidden">
+                    <div class="card-header bg-secondary text-white py-3 px-4">
+                        <h5 class="mb-0 fw-semibold"><i class="fas fa-image me-2"></i>Media</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Current Image -->
+                        <div class="text-center mb-3">
+                            <p class="text-uppercase text-muted small fw-bold mb-3">Currently Displayed</p>
+                            <div class="position-relative d-inline-block">
+                                @if (!string.IsNullOrEmpty(Model.MainImageUrl))
+                                {
+                                    <img src="~/uploads/@Model.MainImageUrl"
+                                         alt="@Model.Name"
+                                         class="img-fluid rounded-3 shadow-sm"
+                                         style="max-height: 220px; object-fit: cover;"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                    <div class="bg-light rounded-3 d-none align-items-center justify-content-center"
+                                         style="width: 220px; height: 220px;">
+                                        <i class="fas fa-image fa-3x text-muted opacity-25"></i>
+                                    </div>
+                                    <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger px-3 py-2">
+                                        <i class="fas fa-trash me-1"></i>To Be Deleted
+                                    </span>
+                                }
+                                else
+                                {
+                                    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                                         style="width: 220px; height: 220px; margin: 0 auto;">
+                                        <div class="text-center text-muted">
+                                            <i class="fas fa-image fa-3x mb-2 opacity-25"></i>
+                                            <p class="small mb-0">No Image</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

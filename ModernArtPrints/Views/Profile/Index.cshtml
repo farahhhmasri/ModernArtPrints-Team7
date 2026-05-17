@@ -1,0 +1,144 @@
+﻿@model ModernArtPrints.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "My Profile";
+
+    var profileImage = string.IsNullOrEmpty(Model.ProfileImageUrl)
+        ? "/uploads/users/default-user.png"
+        : Model.ProfileImageUrl;
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+<section class="profile-premium-page art-page-bg">
+    <div class="container">
+
+        <div class="profile-premium-card">
+
+            <!-- Cover -->
+            <div class="profile-cover"></div>
+
+            <!-- Avatar + Main Info -->
+            <div class="profile-avatar-wrap">
+                <img src="@profileImage"
+                     alt="Profile Image"
+                     class="profile-premium-img" />
+
+                <h2 class="profile-name">
+                    @(string.IsNullOrEmpty(Model.FullName) ? "User Profile" : Model.FullName)
+                </h2>
+
+                <p class="profile-email">
+                    @Model.Email
+                </p>
+            </div>
+
+            <!-- Body -->
+            <div class="profile-premium-body">
+
+                <div class="section-title text-center mb-4">
+                    <span class="section-label">Account Details</span>
+                    <h2>My Information</h2>
+                    <p>Manage your personal details and account activity.</p>
+                </div>
+
+                <div class="profile-info-grid">
+
+                    <div class="profile-info-box">
+                        <span class="profile-info-label">Full Name</span>
+                        <div class="profile-info-value">
+                            @(string.IsNullOrEmpty(Model.FullName) ? "Not provided" : Model.FullName)
+                        </div>
+                    </div>
+
+                    <div class="profile-info-box">
+                        <span class="profile-info-label">Email</span>
+                        <div class="profile-info-value">
+                            @(string.IsNullOrEmpty(Model.Email) ? "Not provided" : Model.Email)
+                        </div>
+                    </div>
+
+                    <div class="profile-info-box">
+                        <span class="profile-info-label">Address</span>
+                        <div class="profile-info-value">
+                            @(string.IsNullOrEmpty(Model.Address) ? "Not provided" : Model.Address)
+                        </div>
+                    </div>
+
+                    <div class="profile-info-box">
+                        <span class="profile-info-label">Date of Birth</span>
+                        <div class="profile-info-value">
+                            @(Model.DateOfBirth.HasValue
+                                ? Model.DateOfBirth.Value.ToString("dd MMM yyyy")
+                                : "Not provided")
+                        </div>
+                    </div>
+
+                    <div class="profile-info-box">
+                        <span class="profile-info-label">Phone Number</span>
+                        <div class="profile-info-value">
+                            @(string.IsNullOrEmpty(Model.PhoneNumber)
+                                ? "Not provided"
+                                : Model.PhoneNumber)
+                        </div>
+                    </div>
+
+                    <div class="profile-info-box">
+                        <span class="profile-info-label">Account Type</span>
+                        <div class="profile-info-value">
+                            Customer Account
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="profile-premium-actions">
+
+                    <a asp-area=""
+                       asp-controller="Profile"
+                       asp-action="Edit"
+                       class="profile-action-btn profile-action-primary">
+                        Edit Profile
+                    </a>
+
+                    <a asp-area=""
+                       asp-controller="Orders"
+                       asp-action="Index"
+                       class="profile-action-btn profile-action-outline">
+                        My Orders
+                    </a>
+
+                    <a asp-area=""
+                       asp-controller="Wishlist"
+                       asp-action="Index"
+                       class="profile-action-btn profile-action-outline">
+                        My Wishlist
+                    </a>
+
+                    @if (ViewBag.HasOrders == true)
+                    {
+                        <a asp-area=""
+                           asp-controller="Testimonials"
+                           asp-action="Create"
+                           class="profile-action-btn profile-testimonial-btn">
+                            Add Testimonial
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Modern Art Prints Admin Dashboard</title>
+
+    <link rel="shortcut icon"
+          href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e"
+          type="image/x-icon">
+
+    <link rel="stylesheet" href="~/AdminPanel/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="~/AdminPanel/assets/compiled/css/iconly.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* ==============================
+                   Admin Sidebar Fix
+                ============================== */
+
+        body {
+            overflow-x: hidden;
+        }
+
+        #app {
+            min-height: 100vh;
+        }
+
+        #sidebar {
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 999;
+            overflow: hidden;
+            background: #fff;
+        }
+
+            #sidebar .sidebar-wrapper {
+                height: 100vh !important;
+                max-height: 100vh !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                padding-bottom: 70px;
+            }
+
+            #sidebar .sidebar-menu {
+                padding-bottom: 100px;
+            }
+
+        #main {
+            min-height: 100vh;
+        }
+
+        /* Hide fake / generated perfect scrollbar rails */
+        .ps__rail-x,
+        .ps__rail-y {
+            display: none !important;
+        }
+
+        /* Better scrollbar */
+        #sidebar .sidebar-wrapper::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        #sidebar .sidebar-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #sidebar .sidebar-wrapper::-webkit-scrollbar-thumb {
+            background: #c7cde8;
+            border-radius: 20px;
+        }
+
+            #sidebar .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+                background: #435ebe;
+            }
+
+        /* ==============================
+                   Sidebar Custom Links
+                ============================== */
+
+        .submenu-item .sidebar-link {
+            padding: 12px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+            .submenu-item .sidebar-link:hover {
+                background-color: #435ebe;
+                color: white !important;
+                transform: translateX(4px);
+            }
+
+            .submenu-item .sidebar-link i {
+                color: #435ebe;
+                transition: 0.3s;
+            }
+
+            .submenu-item .sidebar-link:hover i {
+                color: white;
+            }
+
+        .sidebar-header .logo img {
+            max-width: 140px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .sidebar-item.active > .sidebar-link {
+            background-color: #435ebe;
+            color: #fff !important;
+        }
+
+            .sidebar-item.active > .sidebar-link i {
+                color: #fff !important;
+            }
+
+        /* Make admin content breathe */
+        #main .container {
+            max-width: 100%;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        @@media (max-width: 1199px) {
+            #sidebar {
+                position: fixed;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <script src="~/AdminPanel/assets/static/js/initTheme.js"></script>
+
+        <div id="sidebar" class="sidebar-desktop active">
+            <div class="sidebar-wrapper active">
+
+                <div class="sidebar-header position-relative">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="logo text-center py-3 w-100">
+                            <a asp-area="Admin"
+                               asp-controller="Home"
+                               asp-action="Index"
+                               class="text-decoration-none">
+
+                                <img src="~/uploads/general/logo.png"
+                                     alt="Modern Art Prints"
+                                     style="width: 140px; height: auto; object-fit: contain;" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">Menu</li>
+
+                        <li class="sidebar-item active">
+                            <a asp-area="Admin"
+                               asp-controller="Home"
+                               asp-action="Index"
+                               class="sidebar-link">
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-stack"></i>
+                                <span>Components</span>
+                            </a>
+
+                            <ul class="submenu">
+                                <li class="submenu-item mb-3">
+                                    <a asp-area="Admin"
+                                       asp-controller="Categories"
+                                       asp-action="Index"
+                                       class="sidebar-link d-flex align-items-center gap-2">
+                                        <i class="bi bi-tags-fill fs-5"></i>
+                                        <span>Categories</span>
+                                    </a>
+                                </li>
+
+                                <li class="submenu-item mb-3">
+                                    <a asp-area="Admin"
+                                       asp-controller="Discounts"
+                                       asp-action="Index"
+                                       class="sidebar-link d-flex align-items-center gap-2">
+                                        <i class="bi bi-percent fs-5"></i>
+                                        <span>Discounts</span>
+                                    </a>
+                                </li>
+
+                                <li class="submenu-item mb-3">
+                                    <a asp-area="Admin"
+                                       asp-controller="Products"
+                                       asp-action="Index"
+                                       class="sidebar-link d-flex align-items-center gap-2">
+                                        <i class="bi bi-box-seam-fill fs-5"></i>
+                                        <span>Products</span>
+                                    </a>
+                                </li>
+
+                                <li class="submenu-item mb-3">
+                                    <a asp-area="Admin"
+                                       asp-controller="Orders"
+                                       asp-action="Index"
+                                       class="sidebar-link d-flex align-items-center gap-2">
+                                        <i class="bi bi-bag-check-fill fs-5"></i>
+                                        <span>Orders</span>
+                                    </a>
+                                </li>
+
+                                <li class="submenu-item mb-3">
+                                    <a asp-area="Admin"
+                                       asp-controller="Users"
+                                       asp-action="Index"
+                                       class="sidebar-link d-flex align-items-center gap-2">
+                                        <i class="bi bi-people-fill fs-5"></i>
+                                        <span>Users</span>
+                                    </a>
+                                </li>
+
+                                <li class="submenu-item mb-3">
+                                    <a asp-area="Admin"
+                                       asp-controller="Testimonials"
+                                       asp-action="Index"
+                                       class="sidebar-link d-flex align-items-center gap-2">
+                                        <i class="bi bi-chat-left-text-fill fs-5"></i>
+                                        <span>Testimonials</span>
+                                    </a>
+                                </li>
+
+                                <li class="submenu-item mb-2">
+                                    <a asp-area="Admin"
+                                       asp-controller="ProductReviews"
+                                       asp-action="Index"
+                                       class="sidebar-link d-flex align-items-center gap-2">
+                                        <i class="bi bi-star-fill fs-5"></i>
+                                        <span>Reviews</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="main">
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/AdminPanel/assets/compiled/js/app.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <partial name="_Notification" />
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

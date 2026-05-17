@@ -1,0 +1,137 @@
+﻿@model IEnumerable<ModernArtPrints.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Orders Management</h1>
+
+
+
+<!-- Search & Filter -->
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-5">
+        <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input type="text" name="searchString" class="form-control form-control-sm"
+                   placeholder="Search by user email, name, or order ID..."
+                   value="@ViewData["SearchString"]" />
+        </div>
+    </div>
+    <div class="col-md-2">
+        <select name="orderStatus" class="form-select form-select-sm">
+            <option value="">All Statuses</option>
+            <option value="processing" selected="@(ViewData["OrderStatus"]?.ToString() == "processing" ? "selected" : null)">Processing</option>
+            <option value="shipped" selected="@(ViewData["OrderStatus"]?.ToString() == "shipped" ? "selected" : null)">Shipped</option>
+            <option value="delivered" selected="@(ViewData["OrderStatus"]?.ToString() == "delivered" ? "selected" : null)">Delivered</option>
+            <option value="cancelled" selected="@(ViewData["OrderStatus"]?.ToString() == "cancelled" ? "selected" : null)">Cancelled</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="paymentStatus" class="form-select form-select-sm">
+            <option value="">All Payments</option>
+            <option value="Pending" selected="@(ViewData["PaymentStatus"]?.ToString() == "Pending" ? "selected" : null)">Pending</option>
+            <option value="Paid" selected="@(ViewData["PaymentStatus"]?.ToString() == "Paid" ? "selected" : null)">Paid</option>
+            <option value="Failed" selected="@(ViewData["PaymentStatus"]?.ToString() == "Failed" ? "selected" : null)">Failed</option>
+            <option value="Refunded" selected="@(ViewData["PaymentStatus"]?.ToString() == "Refunded" ? "selected" : null)">Refunded</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-dark btn-sm w-100 rounded-pill">
+            <i class="bi bi-funnel"></i> Filter
+        </button>
+    </div>
+</form>
+
+<table class="table table-hover align-middle">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="py-3 ps-4">#</th>
+            <th scope="col" class="py-3 text-start">User</th>
+            <th scope="col" class="py-3 text-start">Order Date</th>
+            <th scope="col" class="py-3 text-start">Total</th>
+            <th scope="col" class="py-3 text-start">Order Status</th>
+            <th scope="col" class="py-3 text-start">Payment</th>
+            <th scope="col" class="py-3 text-center" width="250px">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="7" class="text-center py-4 text-muted">
+                    <i class="bi bi-inbox fs-2 mb-2"></i>
+                    <p>No orders found.</p>
+                </td>
+            </tr>
+        }
+        else
+        {
+            int count = 1;
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row" class="ps-4">
+                        @count
+                    </th>
+                    <td class="fw-semibold text-start">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <div class="fw-bold">@item.User?.Email</div>
+                              
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        @item.OrderDate.ToString("MM/dd/yyyy HH:mm")
+                    </td>
+                    <td class="text-start fw-bold">
+                        $@item.TotalAmount.ToString("F2")
+                    </td>
+                    <td class="text-start">
+                        <span class="badge @GetOrderStatusBadgeClass(item.OrderStatus)">
+                            @item.OrderStatus
+                        </span>
+                    </td>
+                    <td class="text-start">
+                        <span class="badge @GetPaymentStatusBadgeClass(item.PaymentStatus)">
+                            @item.PaymentStatus
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="btn btn-outline-warning btn-sm rounded-pill px-3">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+
+                       
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>
+
+@functions {
+    string GetOrderStatusBadgeClass(OrderStatus status) => status switch
+    {
+        OrderStatus.delivered => "bg-success",
+        OrderStatus.processing => "bg-warning text-dark",
+        OrderStatus.shipped => "bg-info text-dark",
+        OrderStatus.cancelled => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    string GetPaymentStatusBadgeClass(PaymentStatus status) => status switch
+    {
+        PaymentStatus.Success => "bg-success",
+        PaymentStatus.Pending => "bg-warning text-dark",
+        PaymentStatus.Failed => "bg-danger",
+       
+        _ => "bg-secondary"
+    };
+}

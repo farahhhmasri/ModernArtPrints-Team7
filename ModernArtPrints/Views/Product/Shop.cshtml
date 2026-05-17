@@ -1,0 +1,345 @@
+﻿@model ModernArtPrints.Models.ViewModels.ShopViewModel
+
+<!-- Category Filter Bar -->
+<div class="shop-filter-bar">
+    <div class="container">
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+
+            <a href="/Product/Shop?sortBy=@Model.SortBy&search=@Model.SearchQuery"
+               class="shop-category-pill @(Model.SelectedCategoryId == null ? "active" : "")">
+                All
+            </a>
+
+            @foreach (var category in Model.Categories)
+            {
+                <a href="/Product/Shop?categoryId=@category.Id&sortBy=@Model.SortBy&search=@Model.SearchQuery"
+                   class="shop-category-pill @(Model.SelectedCategoryId == category.Id ? "active" : "")">
+                    @category.Name
+                </a>
+            }
+
+        </div>
+    </div>
+</div>
+<!-- End Category Filter Bar -->
+
+
+<!-- Search + Sort Bar -->
+<div class="container shop-toolbar">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+
+        <!-- Search Form -->
+        <form method="get" action="/Product/Shop" class="d-flex align-items-center" style="gap: 8px; flex: 1; max-width: 420px;">
+            <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
+            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+            <input type="text" name="search" value="@Model.SearchQuery"
+                   placeholder="Search products or categories..."
+                   class="shop-search-input">
+            <button type="submit" class="shop-search-btn">
+                Search
+            </button>
+        </form>
+
+        <!-- Sort + Icons -->
+        <div class="d-flex align-items-center" style="gap: 16px;">
+
+            <!-- Sort Dropdown -->
+            <div class="d-flex align-items-center" style="gap: 10px;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #555;">Sort by:</span>
+                <select class="shop-sort-select"
+                        onchange="window.location.href='/Product/Shop?categoryId=@Model.SelectedCategoryId&search=@Model.SearchQuery&sortBy=' + this.value">
+                    <option value="" selected="@(Model.SortBy == null ? "selected" : null)">Default</option>
+                    <option value="price_asc" selected="@(Model.SortBy == "price_asc" ? "selected" : null)">Price: Low to High</option>
+                    <option value="price_desc" selected="@(Model.SortBy == "price_desc" ? "selected" : null)">Price: High to Low</option>
+                    <option value="rating" selected="@(Model.SortBy == "rating" ? "selected" : null)">Top Rated</option>
+                </select>
+            </div>
+
+            <!-- Divider -->
+            <div style="width: 1px; height: 28px; background: #ddd;"></div>
+
+            <!-- Wishlist Icon -->
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Wishlist" asp-action="Index" class="shop-icon-link">
+                    <i class="anm anm-heart-l" style="font-size: 1.3rem;"></i>
+                </a>
+            }
+            else
+            {
+                <a asp-area="Identity" asp-page="/Account/Login"
+                   title="Login to view wishlist"
+                   class="shop-icon-link">
+                    <i class="anm anm-heart-l" style="font-size: 1.3rem;"></i>
+                </a>
+            }
+
+            
+            
+            <!-- Cart Icon -->
+            <a asp-controller="Cart" asp-action="Index" class="shop-icon-link">
+                <i class="anm anm-cart-l" style="font-size: 1.3rem;"></i>
+                <span id="cart-count" class="shop-cart-count">
+                    @Model.CartCount
+                </span>
+            </a>
+
+        </div>
+        <!-- End Sort + Icons -->
+
+    </div>
+</div>
+<!-- End Search + Sort Bar -->
+
+<!-- Results Summary -->
+<div class="container" style="padding: 10px 0 20px 0;">
+    <p class="shop-results-text">
+        Showing <strong>@Model.Products.Count</strong> product@(Model.Products.Count != 1 ? "s" : "")
+        @if (Model.SelectedCategoryId.HasValue)
+        {
+            var catName = Model.Categories.FirstOrDefault(c => c.Id == Model.SelectedCategoryId)?.Name;
+            <span> in <strong>@catName</strong></span>
+        }
+        @if (!string.IsNullOrEmpty(Model.SearchQuery))
+        {
+            <span> for "<strong>@Model.SearchQuery</strong>"</span>
+        }
+    </p>
+</div>
+
+
+<!-- Product Grid -->
+<div class="container" style="padding-bottom: 60px;">
+
+    @if (!Model.Products.Any())
+    {
+        <div class="no-products-box">
+            <i class="anm anm-search-l" style="font-size: 3rem; color: #ccc;"></i>
+            <h4 style="margin-top: 20px; color: #888;">No products found</h4>
+            <p style="color: #aaa;">Try a different search or category.</p>
+            <a href="/Product/Shop" class="btn btn-primary">
+                Clear Filters
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var product in Model.Products)
+            {
+                var avgRating = product.ProductReviews != null && product.ProductReviews.Any()
+                    ? product.ProductReviews.Average(r => r.Rating)
+                    : 0;
+                var reviewCount = product.ProductReviews?.Count ?? 0;
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="product-premium-card">
+
+                        <!-- Product Image -->
+                        <div class="product-premium-image-wrap">
+                            <a href="/Product/Detail/@product.Id">
+                                <img src="@(product.MainImageUrl ?? "/uploads/general/placeholder.jpg")"
+                                     alt="@product.Name"
+                                     class="product-premium-image">
+                                <div class="product-premium-overlay"></div>
+                            </a>
+
+                            <!-- Discount Badge -->
+                            @if (product.Discount != null &&
+                                 product.Discount.IsActive &&
+                                 product.Discount.StartDate <= DateTime.Now &&
+                                 product.Discount.EndDate >= DateTime.Now)
+                            {
+                                string badge = "";
+
+                                if (product.Discount.DiscountType == DiscountType.Percentage)
+                                    badge = $"-{product.Discount.Value}%";
+                                else if (product.Discount.DiscountType == DiscountType.FixedAmount)
+                                    badge = $"-${product.Discount.Value}";
+                                else if (product.Discount.DiscountType == DiscountType.FreeShipping)
+                                    badge = "Free Shipping";
+
+                                <span class="product-badge sale">
+                                    @badge
+                                </span>
+                            }
+
+                            <!-- Wishlist Icon (top right) -->
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form method="post" action="/Wishlist/Add" class="wishlist-floating-btn">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <button type="submit">
+                                        <i class="anm anm-heart-l" style="font-size: 0.95rem;"></i>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="wishlist-floating-btn">
+                                    <a href="/Identity/Account/Login">
+                                        <i class="anm anm-heart-l" style="font-size: 0.95rem;"></i>
+                                    </a>
+                                </div>
+                            }
+
+                            <!-- Out of Stock Badge -->
+                            @if (product.StockQuantity == 0)
+                            {
+                                <span class="product-badge stock">
+                                    Out of Stock
+                                </span>
+                            }
+                        </div>
+                        <!-- End Product Image -->
+
+                        <!-- Product Details -->
+                        <div class="product-premium-body">
+                            <!-- Category -->
+                            <span class="product-category-text">
+                                @product.Category?.Name
+                            </span>
+
+                            <!-- Name -->
+                            <div class="product-premium-title">
+                                <a href="/Product/Detail/@product.Id">
+                                    @product.Name
+                                </a>
+                            </div>
+
+                            <!-- Star Rating -->
+                            <div class="product-rating-row">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="fa @(i <= Math.Round(avgRating) ? "fa-star" : "fa-star-o")"
+                                       style="font-size: 0.78rem; color: #f5a623;"></i>
+                                }
+                                <span class="product-rating-count">(@reviewCount)</span>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="product-premium-price">
+                                $@product.Price.ToString("0.00")
+                            </div>
+
+                            <!-- Add to Cart -->
+                            <form method="post"
+                                  action="/Cart/Add"
+                                  class="add-to-cart-form"
+                                  style="margin: 0;">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="productId"
+                                       value="@product.Id" />
+
+                                <input type="hidden"
+                                       name="quantity"
+                                       value="1" />
+
+                                <button type="submit"
+                                        class="add-cart-btn"
+                                @(product.StockQuantity == 0 ? "disabled" : "")>
+                                    @(product.StockQuantity == 0 ? "Out of Stock" : "Add to Cart")
+                                </button>
+                            </form>
+
+                        </div>
+                        <!-- End Product Details -->
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+</div>
+<!-- End Product Grid -->
+
+
+<div id="cartToast" class="shop-cart-toast">
+    <div class="shop-cart-toast-icon">✓</div>
+
+    <div>
+        <strong id="cartToastTitle">Added to Cart</strong>
+        <p id="cartToastMessage">Item has been added to your cart.</p>
+    </div>
+</div>
+
+<script>
+    function showCartToast(message, isSuccess = true) {
+        const toast = document.getElementById("cartToast");
+        const title = document.getElementById("cartToastTitle");
+        const messageBox = document.getElementById("cartToastMessage");
+
+        if (!toast || !title || !messageBox) {
+            console.log("Toast elements not found");
+            return;
+        }
+
+        title.textContent = isSuccess ? "Added to Cart" : "Cart Error";
+        messageBox.textContent = message;
+
+        toast.classList.remove("show", "error");
+
+        if (!isSuccess) {
+            toast.classList.add("error");
+        }
+
+        void toast.offsetWidth;
+
+        toast.classList.add("show");
+
+        setTimeout(function () {
+            toast.classList.remove("show");
+        }, 3500);
+    }
+
+    document.querySelectorAll(".add-to-cart-form").forEach(form => {
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch("/Cart/Add", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const cartCount = document.getElementById("cart-count");
+
+                    if (cartCount && data.cartCount !== undefined) {
+                        cartCount.textContent = data.cartCount;
+                    }
+
+                    const button = form.querySelector(".add-cart-btn");
+
+                    if (button) {
+                        const originalText = button.innerHTML;
+                        const originalBackground = button.style.background;
+
+                        button.innerHTML = "Added ✓";
+                        button.style.background = "#2ecc71";
+
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.style.background = originalBackground || "#222";
+                        }, 1200);
+                    }
+
+                    showCartToast(data.message || "Item has been added to your cart.", true);
+                } else {
+                    showCartToast(data.message || "Could not add item to cart.", false);
+                }
+            } catch (error) {
+                showCartToast("Something went wrong. Please try again.", false);
+            }
+        });
+    });
+</script>

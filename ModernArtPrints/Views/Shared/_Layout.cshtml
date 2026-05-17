@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Modern Art Prints</title>
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="~/assets/css/plugins.css" />
+    <link rel="stylesheet" href="~/assets/css/style.css" />
+    <link rel="stylesheet" href="~/assets/css/responsive.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="site-header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light py-3">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    Modern Art Prints
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index" asp-fragment="about">About</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Categories" asp-action="Index">Categories</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index" asp-fragment="contact">Contact</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Wishlist" asp-action="Index">
+                                Wishlist
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Cart" asp-action="Index">
+                                Cart
+                            </a>
+                        </li>
+
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-section mt-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>Modern Art Prints</h4>
+                    <p>
+                        Curated modern wall art prints designed to bring beauty,
+                        style, and personality to your space.
+                    </p>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Products" asp-action="Index">Products</a></li>
+                        <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
+                        <li><a asp-controller="Home" asp-action="Index" asp-fragment="contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <p>Email: support@modernartprints.com</p>
+                    <p>Phone: +962 7 0000 0000</p>
+                    <p>Location: Amman, Jordan</p>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="text-center">
+                <p class="mb-0">
+                    &copy; @DateTime.Now.Year Modern Art Prints. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Template JS -->
+    <script src="~/assets/js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="~/assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/plugins.js"></script>
+    <script src="~/assets/js/main.js"></script>
+
+    <div id="cartToast" class="cart-toast">
+        <div class="cart-toast-icon">
+            ✓
+        </div>
+
+        <div class="cart-toast-content">
+            <strong id="cartToastTitle">Added to Cart</strong>
+            <p id="cartToastMessage">Item has been added to your cart.</p>
+        </div>
+    </div>
+
+    <script>
+        function showCartToast(message, isSuccess = true) {
+            const toast = document.getElementById("cartToast");
+            const title = document.getElementById("cartToastTitle");
+            const messageBox = document.getElementById("cartToastMessage");
+
+            if (!toast || !title || !messageBox) {
+                return;
+            }
+
+            title.textContent = isSuccess ? "Added to Cart" : "Cart Error";
+            messageBox.textContent = message;
+
+            toast.classList.remove("show", "error");
+
+            if (!isSuccess) {
+                toast.classList.add("error");
+            }
+
+            void toast.offsetWidth;
+
+            toast.classList.add("show");
+
+            setTimeout(function () {
+                toast.classList.remove("show");
+            }, 3500);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const addToCartForms = document.querySelectorAll(".add-to-cart-form");
+
+            addToCartForms.forEach(function (form) {
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+
+                    fetch(form.action, {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showCartToast(data.message || "Item has been added to your cart.", true);
+
+                            const cartCountElement = document.getElementById("cartCount");
+                            if (cartCountElement && data.cartCount !== undefined) {
+                                cartCountElement.textContent = data.cartCount;
+                            }
+                        } else {
+                            showCartToast(data.message || "Could not add item to cart.", false);
+                        }
+                    })
+                    .catch(() => {
+                        showCartToast("Something went wrong. Please try again.", false);
+                    });
+                });
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

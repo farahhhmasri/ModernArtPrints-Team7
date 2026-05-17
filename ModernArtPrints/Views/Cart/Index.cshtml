@@ -1,0 +1,160 @@
+﻿@model List<CartItem>
+
+@{
+    ViewData["Title"] = "Your Cart";
+
+    decimal grandTotal = Model.Sum(i => i.TotalPrice);
+    int totalItems = Model.Sum(i => i.Quantity);
+}
+
+<section class="cart-page art-page-bg">
+    <div class="container">
+
+        <div class="cart-header art-fade-down">
+            <span class="section-label">Shopping Cart</span>
+            <h1>Your Cart</h1>
+            <p>Review your selected art prints before checkout.</p>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-cart-card art-scale-in">
+                <div class="empty-cart-icon">
+                    <i class="bi bi-cart-x"></i>
+                </div>
+
+                <h3>Your cart is empty</h3>
+                <p>
+                    Looks like you have not added any art prints yet.
+                    Start exploring and find something beautiful for your space.
+                </p>
+
+                <a href="/Product/Shop" class="cart-checkout-btn">
+                    Start Shopping
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="cart-layout">
+
+                <!-- Cart Items -->
+                <div class="cart-items-card">
+
+                    @foreach (var item in Model)
+                    {
+                        var productImage = string.IsNullOrEmpty(item.Product?.MainImageUrl)
+                        ? "/uploads/general/placeholder.jpg"
+                        : item.Product.MainImageUrl;
+
+                        <div class="cart-item-row">
+
+                            <!-- Product Image -->
+                            <div>
+                                <img src="@productImage"
+                                     alt="@(item.Product?.Name ?? "Product")"
+                                     class="cart-product-img" />
+                            </div>
+
+                            <!-- Product Info -->
+                            <div class="cart-product-info">
+                                <h4>@(item.Product?.Name ?? "Product")</h4>
+
+                                <p>
+                                    Unit Price:
+                                    <span class="cart-product-price">
+                                        $@item.UnitPrice.ToString("0.00")
+                                    </span>
+                                </p>
+
+                                <div class="cart-quantity-box">
+
+                                    <form method="post" action="/Cart/DecreaseQuantity">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="cartItemId" value="@item.Id" />
+                                        <button type="submit" class="cart-qty-btn">
+                                            -
+                                        </button>
+                                    </form>
+
+                                    <span class="cart-qty-number">
+                                        @item.Quantity
+                                    </span>
+
+                                    <form method="post" action="/Cart/IncreaseQuantity">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="cartItemId" value="@item.Id" />
+                                        <button type="submit" class="cart-qty-btn">
+                                            +
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                            <!-- Total + Remove -->
+                            <div class="cart-item-total">
+                                <strong>
+                                    $@item.TotalPrice.ToString("0.00")
+                                </strong>
+
+                                <form method="post" action="/Cart/Remove">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="cartItemId" value="@item.Id" />
+                                    <button type="submit" class="cart-remove-btn">
+                                        Remove
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    }
+
+                    <a href="/Product/Shop" class="cart-continue-btn">
+                        ← Continue Shopping
+                    </a>
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary-card">
+                    <h3>Order Summary</h3>
+
+                    <div class="cart-summary-line">
+                        <span>Items</span>
+                        <strong>@totalItems</strong>
+                    </div>
+
+                    <div class="cart-summary-line">
+                        <span>Subtotal</span>
+                        <strong>$@grandTotal.ToString("0.00")</strong>
+                    </div>
+
+                    <div class="cart-summary-line">
+                        <span>Discount</span>
+                        <strong>Calculated at checkout</strong>
+                    </div>
+
+                    <div class="cart-summary-line">
+                        <span>Shipping</span>
+                        <strong>Calculated at checkout</strong>
+                    </div>
+
+                    <div class="cart-summary-total">
+                        <span>Total</span>
+                        <span>$@grandTotal.ToString("0.00")</span>
+                    </div>
+
+                    <a href="/Payment/" class="cart-checkout-btn">
+                        Proceed To Checkout
+                    </a>
+
+                    <p class="cart-note">
+                        Discount prices and shipping fees are calculated at checkout based on available offers.
+                    </p>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</section>

@@ -1,0 +1,568 @@
+﻿@model ModernArtPrints.Models.ViewModels.HomeViewModel
+
+
+<div id="page-content">
+
+    @Html.AntiForgeryToken()
+
+    <!-- Hero Section-->
+    <div class="slideshow slideshow-wrapper" style="width: 100vw !important;
+        max-width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        padding: 0 !important;
+        overflow: hidden !important;" id="home">
+        <div class="home-slideshow slick-initialized slick-slider">
+            <div class="slick-list draggable">
+                <div class="slick-track" style="opacity: 1; width: 100%;">
+                    <div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 100%; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
+                        <div>
+                            <div class="slide" style="width: 100%; display: inline-block;">
+                                <div class="blur-up lazyloaded" style="position: relative; width: 100%;">
+
+                                    <!-- Hero Image -->
+                                    <img class="blur-up lazyloaded"
+                                         data-src="~/uploads/general/HeroImg.jpeg"
+                                         src="~/uploads/general/HeroImg.jpeg"
+                                         alt="Modern art prints"
+                                         title="Live Surrounded by Art"
+                                         style="width: 100%; height: 600px; object-fit: cover; display: block;">
+
+                                    <!-- Text Overlay -->
+                                    <div class="slideshow__text-wrap slideshow__overlay left"
+                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center;">
+                                        <div class="slideshow__text-content left" style="padding: 0 60px;">
+                                            <div class="wrap-caption anim-tru left style1">
+
+                                                <!-- Main Title -->
+                                                <h2 class="h1 mega-title slideshow__title"
+                                                    style="color: #ffffff !important; font-size: 2.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; text-shadow: 1px 1px 6px rgba(0,0,0,0.5);">
+                                                    Live Surrounded by Art
+                                                </h2>
+
+                                                <!-- Subtitle -->
+                                                <span class="mega-subtitle slideshow__subtitle"
+                                                      style="color: #ffffff !important; font-size: 1.1rem; display: block; margin-bottom: 30px; text-shadow: 1px 1px 4px rgba(0,0,0,0.5);">
+                                                    Every Wall Has a Story. Let Yours Begin Here. <br>
+                                                    Premium prints delivered to your door within days.
+                                                </span>
+
+                                                <!-- Shop Now Button -->
+                                                <a href="Product/Shop"
+                                                       style="display: inline-block;
+                                                    background: #ffffff;
+                                                    color: #222222;
+                                                    padding: 14px 36px;
+                                                    font-weight: 700;
+                                                    font-size: 0.85rem;
+                                                    letter-spacing: 2px;
+                                                    text-transform: uppercase;
+                                                    text-decoration: none;
+                                                    border-radius: 4px;
+                                                    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+                                                    transition: all 0.3s ease;">
+                                                    Shop Now
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Text Overlay -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Hero Section-->
+
+
+    <!-- About and Categories Cards -->
+    <div class="container">
+        <!-- About Section -->
+        <div class="section simple-text-section" id="about">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center">
+
+                    <!-- Title -->
+                    <h2 style="font-size: 2.5rem; font-weight: 800; color: #222; margin-bottom: 12px;">
+                        Our Story
+                    </h2>
+
+                    <!-- Divider -->
+                    <div style="width: 50px; height: 3px; background: #222; margin: 0 auto 24px auto;"></div>
+
+                    <!-- Content -->
+                    <p class="lvl1 parent megamenu"
+                            style="font-size: 0.95rem; color: #555; line-height: 1.9; max-width: 700px; margin: 0 auto;">
+                        We believe art should be for everyone.
+                        Modern Art was born from a passion for bringing contemporary creativity
+                        into everyday spaces. We curate and print exceptional works from
+                        independent artists around the world, making it easy for you to
+                        find the perfect piece for your home or office.
+                        Every print is produced with premium materials, ensuring colors stay
+                        vivid and details stay sharp — for years to come.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <!--End About Section -->
+
+
+        <!-- Categories Banner Masonry -->
+        <div class="collection-banners style1" id="categories">
+            <div class="container-fluid px-4">
+
+                <!-- Section Header -->
+                <div class="text-center mb-5">
+                    <h2 style="font-size: 2.5rem; font-weight: 800; color: #222;">Our Categories</h2>
+                    <div style="width: 50px; height: 3px; background: #222; margin: 12px auto 0 auto;"></div>
+                </div>
+
+                <!-- Collage Grid -->
+                <div class="row g-3">
+
+                    <!-- LEFT COLUMN -->
+                    <div class="col-12 col-md-6 d-flex flex-column" style="gap: 16px;">
+
+                        <!-- Abstract -->
+                        <a asp-controller="Product" asp-action="Shop" asp-route-categoryId="@Model.Categories.FirstOrDefault(c => c.Name == "Abstract")?.Id"
+                           style="text-decoration: none;">
+                            <div class="collection-grid-item" style="position: relative; overflow: hidden; border-radius: 6px;">
+                                <img src="~/uploads/categories/abstract.png"
+                                     alt="Abstract Art"
+                                     style="width: 100%; height: 500px; object-fit: cover; display: block; transition: transform 0.4s ease;">
+                                <div style="position: absolute; bottom: 0; left: 0; width: 100%;
+                                    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+                                    padding: 30px 24px 24px 24px; color: #fff;">
+                                    <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Abstract</h3>
+                                    <p style="font-size: 0.88rem; margin: 0; opacity: 0.9; line-height: 1.6;">
+                                        Bold shapes, colors, and forms — the most popular and recognizable modern art style.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Pop Art -->
+                        <a asp-controller="Product" asp-action="Shop" asp-route-categoryId="@Model.Categories.FirstOrDefault(c => c.Name == "Pop Art")?.Id"
+                           style="text-decoration: none;">
+                            <div class="collection-grid-item" style="position: relative; overflow: hidden; border-radius: 6px;">
+                                <img src="~/uploads/categories/popArt.jpg"
+                                     alt="Pop Art"
+                                     style="width: 100%; height: 320px; object-fit: cover; display: block; transition: transform 0.4s ease;">
+                                <div style="position: absolute; bottom: 0; left: 0; width: 100%;
+                                    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+                                    padding: 30px 24px 24px 24px; color: #fff;">
+                                    <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Pop Art</h3>
+                                    <p style="font-size: 0.88rem; margin: 0; opacity: 0.9; line-height: 1.6;">
+                                        Bright, bold, graphic prints inspired by popular culture and everyday objects.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                    <!-- END LEFT COLUMN -->
+                    <!-- RIGHT COLUMN -->
+                    <div class="col-12 col-md-6 d-flex flex-column" style="gap: 16px;">
+
+                        <!-- Minimalist -->
+                        <a asp-controller="Product" asp-action="Shop" asp-route-categoryId="@Model.Categories.FirstOrDefault(c => c.Name == "Minimalist")?.Id"
+                           style="text-decoration: none;">
+                            <div class="collection-grid-item" style="position: relative; overflow: hidden; border-radius: 6px;">
+                                <img src="~/uploads/categories/minimalist.jpg"
+                                     alt="Minimalist Art"
+                                     style="width: 100%; height: 300px; object-fit: cover; display: block; transition: transform 0.4s ease;">
+                                <div style="position: absolute; bottom: 0; left: 0; width: 100%;
+                                    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+                                    padding: 30px 24px 24px 24px; color: #fff;">
+                                    <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Minimalist</h3>
+                                    <p style="font-size: 0.88rem; margin: 0; opacity: 0.9; line-height: 1.6;">
+                                        Clean lines, simple compositions, and lots of space — very popular for home décor.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Typography -->
+                        <a asp-controller="Product" asp-action="Shop" asp-route-categoryId="@Model.Categories.FirstOrDefault(c => c.Name == "Typography")?.Id"
+                           style="text-decoration: none;">
+                            <div class="collection-grid-item" style="position: relative; overflow: hidden; border-radius: 6px;">
+                                <img src="~/uploads/categories/typography.jpg"
+                                     alt="Typography Art"
+                                     style="width: 100%; height: 260px; object-fit: cover; display: block; transition: transform 0.4s ease;">
+                                <div style="position: absolute; bottom: 0; left: 0; width: 100%;
+                                    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+                                    padding: 30px 24px 24px 24px; color: #fff;">
+                                    <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Typography Art</h3>
+                                    <p style="font-size: 0.88rem; margin: 0; opacity: 0.9; line-height: 1.6;">
+                                        Quotes, words, and letters turned into visual art — great for offices and living spaces.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Nature -->
+                        <a asp-controller="Product" asp-action="Shop" asp-route-categoryId="@Model.Categories.FirstOrDefault(c => c.Name == "Nature")?.Id"
+                           style="text-decoration: none;">
+                            <div class="collection-grid-item" style="position: relative; overflow: hidden; border-radius: 6px;">
+                                <img src="~/uploads/categories/nature.jpg"
+                                     alt="Nature & Botanical Art"
+                                     style="width: 100%; height: 260px; object-fit: cover; display: block; transition: transform 0.4s ease;">
+                                <div style="position: absolute; bottom: 0; left: 0; width: 100%;
+                                    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+                                    padding: 30px 24px 24px 24px; color: #fff;">
+                                    <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Nature & Botanical</h3>
+                                    <p style="font-size: 0.88rem; margin: 0; opacity: 0.9; line-height: 1.6;">
+                                        Modern interpretations of flowers, plants, and landscapes — timeless and widely appealing.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                    <!-- END RIGHT COLUMN -->
+
+                </div>
+            </div>
+        </div>
+        <!-- End Categories Banner Masonry -->
+
+
+    </div>
+    <!--End About and Categories Cards -->
+
+
+    <!-- Sale Slider -->
+    <div class="section" id="sale" style="padding: 80px 0; background: #fff;">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <h2 style="font-size: 2.5rem; font-weight: 800;">Items On Sale</h2>
+                <div style="width: 50px; height: 3px; background: #222; margin: 12px auto;"></div>
+            </div>
+
+            @if (Model.SaleProducts != null && Model.SaleProducts.Any())
+            {
+                var products = Model.SaleProducts;
+                int itemsPerSlide = 4;
+
+                <div id="saleCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+
+                    <div class="carousel-inner">
+
+                        @for (int i = 0; i < products.Count; i += itemsPerSlide)
+                        {
+                            var chunk = products.Skip(i).Take(itemsPerSlide).ToList();
+
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <div class="row g-3 px-5">
+
+                                    @foreach (var product in chunk)
+                                    {
+                                        bool hasDiscount = product.Discount != null;
+                                        string discountLabel = "";
+
+                                        if (hasDiscount)
+                                        {
+                                            if (product.Discount.DiscountType == DiscountType.FixedAmount)
+                                                discountLabel = $"-${product.Discount.Value}";
+                                            else if (product.Discount.DiscountType == DiscountType.Percentage)
+                                                discountLabel = $"-{product.Discount.Value}%";
+                                            else if (product.Discount.DiscountType == DiscountType.FreeShipping)
+                                                discountLabel = "Free Shipping";
+                                        }
+
+                                        <div class="col-12 col-md-3">
+                                            <div style="border: 1px solid #eee; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+
+                                                <!-- Image -->
+                                                <div style="position: relative;">
+
+                                                    @if (hasDiscount)
+                                                    {
+                                                        <div style="position: absolute; top: 10px; left: 10px;
+                                                            background: #e74c3c; color: #fff;
+                                                            padding: 4px 9px; font-size: 0.72rem;
+                                                            font-weight: 700; border-radius: 4px; z-index: 2;">
+                                                            @discountLabel
+                                                        </div>
+                                                    }
+
+                                                    <a href="/Product/Detail/@product.Id">
+                                                        <img src="@(product.MainImageUrl ?? "/uploads/general/placeholder.jpg")"
+                                                             alt="@product.Name"
+                                                             style="width: 100%; height: 220px; object-fit: cover; display: block;">
+                                                    </a>
+
+                                                </div>
+
+                                                <!-- Details -->
+                                                <div class="text-center" style="padding: 16px 12px;">
+
+                                                    <h6 style="font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        @product.Name
+                                                    </h6>
+
+                                                    <div style="font-weight: 800; font-size: 1rem; margin-bottom: 12px; color: #222;">
+                                                        $@product.Price.ToString("0.00")
+                                                    </div>
+
+                                                    <!-- Add to Cart Button -->
+                                                    <button class="add-to-cart-btn"
+                                                            data-id="@product.Id"
+                                                            style="display: inline-block;
+                                                        background: #222;
+                                                        color: #fff;
+                                                        border: none;
+                                                        padding: 8px 20px;
+                                                        font-size: 0.78rem;
+                                                        font-weight: 700;
+                                                        letter-spacing: 1px;
+                                                        text-transform: uppercase;
+                                                        border-radius: 4px;
+                                                        cursor: pointer;
+                                                        width: 100%;
+                                                        transition: background 0.2s ease;">
+                                                        Add to Cart
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+                    <!-- Styled Prev / Next Arrows -->
+                    <button class="carousel-control-prev" type="button"
+                            data-bs-target="#saleCarousel" data-bs-slide="prev"
+                            style="width: 44px; height: 44px; background: #222; border-radius: 50%;
+                        top: 50%; transform: translateY(-50%);
+                        left: -10px; opacity: 1; position: absolute;">
+                        <span class="carousel-control-prev-icon" style="width: 18px; height: 18px;"></span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button"
+                            data-bs-target="#saleCarousel" data-bs-slide="next"
+                            style="width: 44px; height: 44px; background: #222; border-radius: 50%;
+                        top: 50%; transform: translateY(-50%);
+                        right: -10px; opacity: 1; position: absolute;">
+                        <span class="carousel-control-next-icon" style="width: 18px; height: 18px;"></span>
+                    </button>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted">No sale products available.</div>
+            }
+
+        </div>
+    </div>
+    <!-- End Sale Slider -->
+
+
+    <!--Testimonials-->
+    <div class="section" id="testimonials" style="padding: 80px 0; background: #f9f9f9;">
+        <div class="container">
+
+            <!-- Section Header -->
+            <div class="text-center mb-5">
+                <h2 style="font-size: 2.5rem; font-weight: 800; color: #222;">What Our Customers Say</h2>
+                <div style="width: 50px; height: 3px; background: #222; margin: 12px auto 0 auto;"></div>
+            </div>
+
+            @if (Model != null && Model.Testimonials.Any())
+            {
+                <!-- Bootstrap Carousel -->
+                <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel">
+
+                    <!-- Indicators (dots) -->
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < Model.Testimonials.Count; i++)
+                        {
+                            <button type="button"
+                                    data-bs-target="#testimonialsCarousel"
+                                    data-bs-slide-to="@i"
+                                    class="@(i == 0 ? "active" : "")"
+                                    style="background-color: #222;">
+                            </button>
+                        }
+                    </div>
+
+                    <!-- Slides -->
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.Testimonials.Count; i++)
+                        {
+                            var testimonial = Model.Testimonials[i];
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <div class="row justify-content-center">
+                                    <div class="col-12 col-md-7">
+                                        <div style="background: #fff; border: 1px solid #eee; border-radius: 6px; padding: 40px 50px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.07);">
+
+                                            <!-- User Image -->
+                                            @if (!string.IsNullOrEmpty(testimonial.User?.ProfileImageUrl))
+                                            {
+                                                <img src="@testimonial.User.ProfileImageUrl"
+                                                     alt="@testimonial.User.FullName"
+                                                     style="width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 3px solid #222; margin-bottom: 16px; display: block; margin-left: auto; margin-right: auto;">
+                                            }
+                                            else
+                                            {
+                                                <!-- Fallback avatar with user initials -->
+                                                <div style="width: 75px; height: 75px; border-radius: 50%; background: #222; color: #fff;
+                                                    display: flex; align-items: center; justify-content: center;
+                                                    font-size: 1.5rem; font-weight: 700;
+                                                    margin-bottom: 16px; margin-left: auto; margin-right: auto;
+                                                    border: 3px solid #222;">
+                                                    @(testimonial.User?.FullName?.Substring(0, 1).ToUpper() ?? "?")
+                                                </div>
+                                            }
+
+                                            <!-- Stars (static 5 stars for now) -->
+                                            <div style="margin-bottom: 14px;">
+                                                <i class="fa fa-star" style="color: #f5a623;"></i>
+                                                <i class="fa fa-star" style="color: #f5a623;"></i>
+                                                <i class="fa fa-star" style="color: #f5a623;"></i>
+                                                <i class="fa fa-star" style="color: #f5a623;"></i>
+                                                <i class="fa fa-star" style="color: #f5a623;"></i>
+                                            </div>
+
+                                            <!-- Message -->
+                                            <p style="font-size: 0.95rem; color: #555; line-height: 1.9; font-style: italic; margin-bottom: 24px;">
+                                                "@testimonial.Message"
+                                            </p>
+
+                                            <!-- User Name -->
+                                            <h6 style="font-size: 1rem; font-weight: 700; color: #222; margin-bottom: 4px;">
+                                                @testimonial.User?.FullName
+                                            </h6>
+                                            <span style="font-size: 0.78rem; color: #888; letter-spacing: 1px; text-transform: uppercase;">
+                                                Verified Buyer
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Prev / Next Arrows -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
+                        <span style="background: #222; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <span class="carousel-control-prev-icon"></span>
+                        </span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="next">
+                        <span style="background: #222; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <span class="carousel-control-next-icon"></span>
+                        </span>
+                    </button>
+
+                </div>
+                <!-- End Bootstrap Carousel -->
+            }
+            else
+            {
+                <div class="text-center" style="color: #888; font-size: 0.95rem;">
+                    No testimonials yet. Be the first to share your experience!
+                </div>
+            }
+
+        </div>
+    </div>
+    <!--End Testimonials-->
+
+
+</div>
+
+
+<!-- Add to Cart Script -->
+@section Scripts {
+    <script>
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', async function () {
+                const productId = this.getAttribute('data-id');
+                const btn = this;
+
+                // Get the anti-forgery token
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                // Visual feedback
+                btn.textContent = 'Adding...';
+                btn.disabled = true;
+                btn.style.background = '#555';
+
+                try {
+                    const response = await fetch('/Cart/Add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `productId=${productId}&quantity=1&__RequestVerificationToken=${encodeURIComponent(token)}`
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Update cart count in header
+                        const cartCount = document.querySelector('.site-cart-count');
+                        if (cartCount) cartCount.textContent = data.cartCount;
+
+                        // Success feedback then redirect to cart
+                        btn.textContent = 'Added ✓';
+                        btn.style.background = '#27ae60';
+
+                        setTimeout(() => {
+                            window.location.href = '/Cart/Index';
+                        }, 800);
+                    }
+                } catch (error) {
+                    console.error('Cart error:', error);
+                    btn.textContent = 'Add to Cart';
+                    btn.style.background = '#222';
+                    btn.disabled = false;
+                }
+            });
+        });
+
+
+ 
+        // Highlight nav link based on scroll position
+        const sections = ['home', 'about', 'categories', 'sale', 'testimonials', 'contact'];
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    const sectionTop = section.offsetTop - 100;
+                    if (window.scrollY >= sectionTop) {
+                        current = id;
+                    }
+                }
+            });
+
+            document.querySelectorAll('#siteNav a').forEach(link => {
+                link.classList.remove('active-nav');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active-nav');
+                }
+            });
+        });
+
+
+
+
+    </script>
+}

@@ -1,0 +1,57 @@
+﻿@model ModernArtPrints.Models.Order
+
+@{
+    ViewData["Title"] = "Payment Success";
+}
+
+<section class="payment-result-page art-page-bg">
+    <div class="container">
+
+        <div class="payment-result-card">
+
+            <div class="payment-result-icon success">
+                ✓
+            </div>
+
+            <span class="section-label">Payment Completed</span>
+
+            <h1>Thank You for Your Order</h1>
+
+            <p>
+                Your payment was completed successfully, and your order has been created.
+                You can now track your order status from your orders page.
+            </p>
+
+            @if (Model != null)
+            {
+                <div class="payment-result-note">
+                    <strong>Order Number:</strong> #@Model.Id <br />
+                    <strong>Total:</strong> @Model.TotalAmount.ToString("0.00") JD <br />
+                    <strong>Status:</strong> @Model.OrderStatus
+                </div>
+            }
+            else
+            {
+                <div class="payment-result-note">
+                    Your order details are available in your orders page.
+                </div>
+            }
+
+            <div class="payment-result-actions">
+                <a asp-controller="Orders"
+                   asp-action="Index"
+                   class="payment-result-btn payment-result-primary">
+                    View My Orders
+                </a>
+
+                <a asp-controller="Product"
+                   asp-action="Shop"
+                   class="payment-result-btn payment-result-outline">
+                    Continue Shopping
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>

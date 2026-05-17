@@ -1,0 +1,138 @@
+﻿@model ModernArtPrints.Models.ViewModels.OrderReviewViewModel
+
+@{
+    ViewData["Title"] = "Add Reviews";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+<section class="review-art-section art-page-bg">
+    <div class="container">
+
+        <div class="review-page-header art-fade-down">
+            <span class="section-label">Product Reviews</span>
+            <h1>Add Reviews</h1>
+            <p>
+                Share your experience with the art prints from this order.
+                You can review one product or more, and your reviews will appear after admin approval.
+            </p>
+        </div>
+
+        <div class="review-art-card">
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="OrderId" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+
+                @for (int i = 0; i < Model.Products.Count; i++)
+                {
+                    var imageUrl = string.IsNullOrEmpty(Model.Products[i].ProductImageUrl)
+                    ? "/uploads/products/default-product.png"
+                    : Model.Products[i].ProductImageUrl;
+
+                    <div class="review-product-card">
+
+                        <input type="hidden" asp-for="Products[i].ProductId" />
+                        <input type="hidden" asp-for="Products[i].ProductName" />
+                        <input type="hidden" asp-for="Products[i].ProductImageUrl" />
+
+                        <div class="row align-items-center">
+
+                            <div class="col-lg-4 mb-4 mb-lg-0">
+                                <div class="review-product-image-wrap">
+                                    <img src="@imageUrl"
+                                         alt="@Model.Products[i].ProductName"
+                                         class="review-product-image" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-8">
+                                <div class="review-product-content">
+
+                                    <span class="review-product-tag">
+                                        Purchased Art Print
+                                    </span>
+
+                                    <h3>
+                                        @Model.Products[i].ProductName
+                                    </h3>
+
+                                    <p class="review-helper-text">
+                                        Rate this artwork and write a short review about the quality,
+                                        colors, delivery, or how it looked in your space.
+                                    </p>
+
+                                    <div class="rating-block mb-4">
+                                        <label class="form-label">Your Rating</label>
+
+                                        <div class="star-rating">
+                                            <input type="radio" id="star5-@i" asp-for="Products[i].Rating" value="5" />
+                                            <label for="star5-@i" title="5 stars">★</label>
+
+                                            <input type="radio" id="star4-@i" asp-for="Products[i].Rating" value="4" />
+                                            <label for="star4-@i" title="4 stars">★</label>
+
+                                            <input type="radio" id="star3-@i" asp-for="Products[i].Rating" value="3" />
+                                            <label for="star3-@i" title="3 stars">★</label>
+
+                                            <input type="radio" id="star2-@i" asp-for="Products[i].Rating" value="2" />
+                                            <label for="star2-@i" title="2 stars">★</label>
+
+                                            <input type="radio" id="star1-@i" asp-for="Products[i].Rating" value="1" />
+                                            <label for="star1-@i" title="1 star">★</label>
+                                        </div>
+
+                                        <span asp-validation-for="Products[i].Rating" class="text-danger d-block mt-2"></span>
+                                    </div>
+
+                                    <div class="review-textarea-block">
+                                        <label class="form-label">Your Review</label>
+
+                                        <textarea asp-for="Products[i].CommentText"
+                                                  class="form-control review-textarea"
+                                                  rows="5"
+                                                  placeholder="Example: The print quality was beautiful, and the colors matched my room perfectly..."></textarea>
+
+                                        <span asp-validation-for="Products[i].CommentText" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+                <div class="review-submit-area">
+                    <a asp-controller="Orders"
+                       asp-action="Index"
+                       class="review-back-btn">
+                        Back to Orders
+                    </a>
+
+                    <button type="submit" class="review-submit-btn">
+                        Submit Reviews
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

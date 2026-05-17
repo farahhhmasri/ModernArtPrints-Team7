@@ -1,0 +1,160 @@
+﻿@model ModernArtPrints.Areas.Admin.Controllers.UserDetailsViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    var roleBadge = Model.Roles.Contains("Admin") ? "bg-danger" : "bg-primary";
+    var roleText = string.Join(", ", Model.Roles);
+}
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">
+            <i class="fas fa-user"></i> User Details
+        </h2>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary ms-2">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <!-- Details Card -->
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-info text-white py-3">
+            <h5 class="mb-0"><i class="fas fa-info-circle"></i> User Information</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row align-items-start">
+
+                <!-- Image Section -->
+                <div class="col-lg-4 col-md-5 col-12 mb-4 mb-md-0 text-center">
+                    <div class="img-wrapper shadow-sm rounded-circle mx-auto overflow-hidden bg-secondary d-flex align-items-center justify-content-center"
+                         style="width: 280px; height: 280px;">
+                        @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                        {
+                            <img src="@Url.Content(Model.ProfileImageUrl)"
+                                 alt="@Model.FullName"
+                                 class="img-fluid w-100 h-100"
+                                 style="object-fit: cover;"
+                                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-icon').style.display='flex';" />
+
+                            <!-- Hidden fallback that shows on error -->
+                            <div class="fallback-icon d-none align-items-center justify-content-center flex-column w-100 h-100">
+                                <i class="fas fa-user fa-5x text-white mb-3 opacity-75"></i>
+                                <p class="text-white mb-0">Image Not Found</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center flex-column w-100 h-100">
+                                <i class="fas fa-user fa-5x text-white mb-3 opacity-75"></i>
+                                <p class="text-white mb-0">No Image Available</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Details Section -->
+                <div class="col-lg-8 col-md-7 col-12">
+
+                    <!-- Full Name -->
+                    <div class="detail-item mb-4 pb-3 border-bottom">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2 fs-6">
+                            <i class="fas fa-user me-2"></i>Full Name
+                        </h6>
+                        <h3 class="fw-bold text-dark mb-0">@Model.FullName</h3>
+                    </div>
+
+                    <!-- Role -->
+                    <div class="detail-item mb-4 pb-3 border-bottom">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2 fs-6">
+                            <i class="fas fa-shield-alt me-2"></i>Role
+                        </h6>
+                        <p class="text-secondary fs-5 mb-0">
+                            <span class="badge @roleBadge fs-6 px-3 py-2">
+                                @roleText
+                            </span>
+                        </p>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="detail-item mb-4 pb-3 border-bottom">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2 fs-6">
+                            <i class="fas fa-user-tag me-2"></i>Username
+                        </h6>
+                        <h5 class="fw-bold text-dark mb-0">@Model.UserName</h5>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="detail-item mb-4 pb-3 border-bottom">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2 fs-6">
+                            <i class="fas fa-envelope me-2"></i>Email
+                        </h6>
+                        <div class="d-flex align-items-center gap-2">
+                            <h5 class="fw-bold text-dark mb-0">@Model.Email</h5>
+                            @if (Model.EmailConfirmed)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i>Verified
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-exclamation-circle me-1"></i>Unverified
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="detail-item mb-4 pb-3 border-bottom">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2 fs-6">
+                            <i class="fas fa-phone me-2"></i>Phone
+                        </h6>
+                        <p class="text-secondary fs-5 mb-0">
+                            @(Model.PhoneNumber ?? "Not provided")
+                        </p>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="detail-item mb-4 pb-3 border-bottom">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2 fs-6">
+                            <i class="fas fa-map-marker-alt me-2"></i>Address
+                        </h6>
+                        <p class="text-secondary fs-5 mb-0">
+                            @(Model.Address ?? "Not provided")
+                        </p>
+                    </div>
+
+                    <!-- Order Count -->
+                    <div class="detail-item mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2 fs-6">
+                            <i class="fas fa-shopping-bag me-2"></i>Total Orders
+                        </h6>
+                        <p class="text-secondary fs-5 mb-0">
+                            <span class="badge bg-light text-dark border">
+                                <i class="fas fa-hashtag me-1"></i>
+                                @Model.Orders.Count orders
+                            </span>
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons (Mobile visible) -->
+                    <div class="d-md-none mt-4 pt-3 border-top">
+                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning w-100 mb-2">
+                            <i class="fas fa-edit"></i> Edit User
+                        </a>
+                        <a asp-action="Index" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

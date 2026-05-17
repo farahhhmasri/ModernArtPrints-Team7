@@ -1,0 +1,85 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<section class="auth-premium-page art-page-bg">
+    <div class="container">
+
+        <div class="auth-premium-wrapper">
+
+            <div class="auth-premium-side">
+                <span>Welcome Back</span>
+                <h1>Log in to your art space</h1>
+                <p>
+                    Access your profile, wishlist, cart, orders, and continue exploring
+                    modern art prints curated for your space.
+                </p>
+            </div>
+
+            <div class="auth-premium-form">
+                <h2>Log in</h2>
+                <p class="auth-subtitle">
+                    Use your account details to continue shopping and managing your orders.
+                </p>
+
+                <form id="account" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="form-floating">
+                        <input asp-for="Input.Email"
+                               class="form-control"
+                               autocomplete="username"
+                               aria-required="true"
+                               placeholder="name@example.com" />
+                        <label asp-for="Input.Email">Email</label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="Input.Password"
+                               class="form-control"
+                               autocomplete="current-password"
+                               aria-required="true"
+                               placeholder="Password" />
+                        <label asp-for="Input.Password">Password</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        <label class="form-check-label" asp-for="Input.RememberMe">
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+
+                    <button id="login-submit" type="submit" class="w-100 btn btn-primary">
+                        Log in
+                    </button>
+
+                    <div class="auth-links">
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">
+                            Don’t have an account? Create one
+                        </a>
+
+                        <a id="forgot-password" asp-page="./ForgotPassword">
+                            Forgot your password?
+                        </a>
+                    </div>
+
+                    <div class="auth-small-note">
+                        Your account helps us save your wishlist, cart, orders, and personalized shopping experience.
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

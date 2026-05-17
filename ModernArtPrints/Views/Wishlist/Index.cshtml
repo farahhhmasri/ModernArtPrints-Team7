@@ -1,0 +1,222 @@
+﻿@model List<ModernArtPrints.Models.Wishlist>
+
+@{
+    ViewData["Title"] = "My Wishlist";
+}
+
+<!-- TempData Messages -->
+@if (TempData["Success"] != null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+}
+
+@if (TempData["Info"] != null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["Info"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+}
+
+<!-- Top Bar -->
+<div class="shop-filter-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+
+        <a asp-controller="Product"
+           asp-action="Shop"
+           class="shop-category-pill">
+            <i class="anm anm-angle-left-l"></i>
+            Back to Shop
+        </a>
+
+        <a asp-controller="Cart"
+           asp-action="Index"
+           class="shop-icon-link">
+            <i class="anm anm-cart-l" style="font-size: 1.35rem;"></i>
+
+            <span id="cart-count" class="shop-cart-count">
+                @ViewBag.CartCount
+            </span>
+        </a>
+
+    </div>
+</div>
+
+<section class="wishlist-premium-page art-page-bg">
+    <div class="container">
+
+        <div class="wishlist-header art-fade-down">
+            <span class="section-label">Saved Art Prints</span>
+            <h1>My Wishlist</h1>
+            <p>
+                Keep your favorite modern art prints in one place and move them to your cart anytime.
+            </p>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="empty-wishlist-card">
+                <div class="empty-wishlist-icon">
+                    <i class="anm anm-heart-l"></i>
+                </div>
+
+                <h3>Your wishlist is empty</h3>
+
+                <p>
+                    Browse our collection and save the art prints you love.
+                </p>
+
+                <a asp-controller="Product"
+                   asp-action="Shop"
+                   class="cart-checkout-btn">
+                    Browse Shop
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="wishlist-grid">
+
+                @foreach (var item in Model)
+                {
+                    var productImage = string.IsNullOrEmpty(item.Product?.MainImageUrl)
+                    ? "/uploads/general/placeholder.jpg"
+                    : item.Product.MainImageUrl;
+
+                    <div class="wishlist-card">
+
+                        <div class="wishlist-img-wrap">
+
+                            <a asp-controller="Product"
+                               asp-action="Detail"
+                               asp-route-id="@item.ProductId">
+                                <img src="@productImage"
+                                     alt="@(item.Product?.Name ?? "Product")"
+                                     class="wishlist-img" />
+                            </a>
+
+                            <form method="post"
+                                  asp-action="Remove"
+                                  style="position:absolute; top:14px; right:14px; margin:0;">
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="wishlistId"
+                                       value="@item.Id" />
+
+                                <button type="submit"
+                                        title="Remove from wishlist"
+                                        style="width:39px; height:39px; border-radius:50%; border:none; background:#fff; color:#dc3545; box-shadow:0 8px 22px rgba(0,0,0,0.16); display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                                    <i class="icon anm anm-times-l"></i>
+                                </button>
+                            </form>
+
+                        </div>
+
+                        <div class="wishlist-body">
+
+                            <span class="wishlist-category">
+                                @(item.Product?.Category?.Name ?? "Art Print")
+                            </span>
+
+                            <h3 class="wishlist-title">
+                                <a asp-controller="Product"
+                                   asp-action="Detail"
+                                   asp-route-id="@item.ProductId">
+                                    @(item.Product?.Name ?? "Product")
+                                </a>
+                            </h3>
+
+                            <div class="wishlist-price">
+                                $@(item.Product?.Price.ToString("0.00") ?? "0.00")
+                            </div>
+
+                            <div class="mb-3">
+                                @if (item.Product?.StockQuantity > 0)
+                                {
+                                    <span class="product-detail-stock in-stock" style="margin-bottom:0;">
+                                        In Stock
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="product-detail-stock out-stock" style="margin-bottom:0;">
+                                        Out of Stock
+                                    </span>
+                                }
+                            </div>
+
+                            <div class="wishlist-actions">
+
+                                @if (item.Product?.StockQuantity > 0)
+                                {
+                                    <form method="post"
+                                          asp-action="AddToCartAndRemove"
+                                          style="flex:1; margin:0;">
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="wishlistId"
+                                               value="@item.Id" />
+
+                                        <input type="hidden"
+                                               name="productId"
+                                               value="@item.ProductId" />
+
+                                        <button type="submit"
+                                                class="wishlist-add-cart-btn">
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <button disabled
+                                            class="wishlist-add-cart-btn"
+                                            style="background:#ccc; cursor:not-allowed;">
+                                        Out of Stock
+                                    </button>
+                                }
+
+                                <form method="post"
+                                      asp-action="Remove"
+                                      style="margin:0;">
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="wishlistId"
+                                           value="@item.Id" />
+
+                                    <button type="submit"
+                                            class="wishlist-remove-btn">
+                                        Remove
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="text-center mt-5">
+                <a asp-controller="Product"
+                   asp-action="Shop"
+                   class="cart-continue-btn">
+                    ← Continue Shopping
+                </a>
+            </div>
+        }
+
+    </div>
+</section>

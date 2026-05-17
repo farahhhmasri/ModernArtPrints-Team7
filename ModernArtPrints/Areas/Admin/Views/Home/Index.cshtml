@@ -1,0 +1,506 @@
+﻿@using ModernArtPrints.Models
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    var admin = ViewBag.Admin as ApplicationUser;
+}
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+    .dashboard-title {
+        margin-bottom: 30px;
+    }
+
+        .dashboard-title h2 {
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-title p {
+            color: #6b7280;
+            margin: 0;
+            font-size: 16px;
+        }
+
+    .dashboard-card {
+        border: none;
+        border-radius: 24px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+        }
+
+        .dashboard-card .card-body {
+            padding: 1.7rem;
+        }
+
+    .stats-title {
+        color: #9ca3af;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .stats-number {
+        font-size: 34px;
+        font-weight: 800;
+        color: #111827;
+        margin: 0;
+    }
+
+    .dashboard-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+    }
+
+    .purple-gradient {
+        background: linear-gradient(135deg, #7b2ff7, #4facfe);
+    }
+
+    .blue-gradient {
+        background: linear-gradient(135deg, #36d1dc, #5b86e5);
+    }
+
+    .green-gradient {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+    }
+
+    .red-gradient {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+
+    .profile-card {
+        border: none;
+        border-radius: 24px;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+        .profile-card .card-body {
+            padding: 2rem;
+        }
+
+    .profile-image-wrapper {
+        width: 130px;
+        height: 130px;
+        margin: auto;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid #f3f4f6;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-placeholder {
+        font-size: 50px;
+        color: #9ca3af;
+    }
+
+    .profile-name {
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+        margin-top: 18px;
+        margin-bottom: 5px;
+    }
+
+    .profile-email {
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .mini-stats {
+        margin-top: 25px;
+    }
+
+    .mini-stat-number {
+        font-size: 24px;
+        font-weight: 800;
+        color: #111827;
+    }
+
+    .mini-stat-title {
+        color: #9ca3af;
+        font-size: 13px;
+        margin-top: 3px;
+    }
+
+    /* Chart Cards */
+    .chart-card {
+        border: none;
+        border-radius: 24px;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+        .chart-card .card-header {
+            background: transparent;
+            border-bottom: 1px solid #f3f4f6;
+            padding: 1.5rem;
+        }
+
+        .chart-card .card-title {
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .chart-card .card-body {
+            padding: 1.5rem;
+        }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+
+    /* Home Button */
+    .home-btn {
+        background: linear-gradient(135deg, #111827, #374151);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            color: white;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+        }
+</style>
+
+<div class="dashboard-title d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+    <div>
+        <h2>Dashboard Overview</h2>
+        <p>
+            Welcome back,
+            <strong>@(admin?.FullName ?? "Admin")</strong>
+        </p>
+    </div>
+
+    <!-- Back To Home Button -->
+    <a asp-area=""
+       asp-controller="User"
+       asp-action="Index"
+       class="home-btn">
+
+        <i class="bi bi-house-door-fill"></i>
+        Back To Home
+    </a>
+
+</div>
+
+<div class="page-content">
+    <section class="row g-4">
+
+        <!-- Statistics Cards -->
+        <div class="col-12 col-lg-9">
+            <div class="row g-4">
+
+                <!-- Products -->
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stats-title">Products</div>
+                                    <h2 class="stats-number">@ViewBag.TotalProducts</h2>
+                                </div>
+                                <div class="dashboard-icon purple-gradient">
+                                    <i class="bi bi-box-seam-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stats-title">Categories</div>
+                                    <h2 class="stats-number">@ViewBag.TotalCategories</h2>
+                                </div>
+                                <div class="dashboard-icon blue-gradient">
+                                    <i class="bi bi-grid-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders -->
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stats-title">Orders</div>
+                                    <h2 class="stats-number">@ViewBag.TotalOrders</h2>
+                                </div>
+                                <div class="dashboard-icon green-gradient">
+                                    <i class="bi bi-bag-check-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users -->
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="stats-title">Users</div>
+                                    <h2 class="stats-number">@ViewBag.TotalUsers</h2>
+                                </div>
+                                <div class="dashboard-icon red-gradient">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===== CHARTS ROW ===== -->
+            <div class="row g-4 mt-2">
+
+                <!-- Chart 1: Category Sales (Doughnut) -->
+                <div class="col-12 col-lg-6">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="bi bi-pie-chart-fill me-2 text-primary"></i>
+                                Sales by Category
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="categorySalesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 2: User Growth (Line) -->
+                <div class="col-12 col-lg-6">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="bi bi-graph-up-arrow me-2 text-success"></i>
+                                User Growth Over Time
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="userGrowthChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Admin Profile -->
+        <div class="col-12 col-lg-3">
+            <div class="card profile-card">
+                <div class="card-body text-center">
+                    <div class="profile-image-wrapper">
+                        @if (!string.IsNullOrEmpty(admin?.ProfileImageUrl))
+                        {
+                            <img src="@Url.Content(admin.ProfileImageUrl)"
+                                 alt="Admin Image"
+                                 class="profile-image"
+                                 onerror="this.style.display='none'; document.getElementById('fallbackIcon').style.display='flex';" />
+                        }
+                        <div id="fallbackIcon"
+                             class="w-100 h-100 d-flex align-items-center justify-content-center"
+                             style="@(string.IsNullOrEmpty(admin?.ProfileImageUrl) ? "" : "display:none;")">
+                            <i class="bi bi-person-fill profile-placeholder"></i>
+                        </div>
+                    </div>
+                    <h4 class="profile-name">
+                        @(admin?.FullName ?? "Admin")
+                    </h4>
+                    <p class="profile-email">
+                        @(admin?.Email ?? "admin@gmail.com")
+                    </p>
+                    <hr />
+                    <div class="row mini-stats text-center">
+                        <div class="col-6">
+                            <div class="mini-stat-number">
+                                @ViewBag.TotalProducts
+                            </div>
+                            <div class="mini-stat-title">
+                                Products
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mini-stat-number">
+                                @ViewBag.TotalOrders
+                            </div>
+                            <div class="mini-stat-title">
+                                Orders
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<!-- Chart Scripts -->
+<script>
+    // ===== CHART 1: Category Sales (Doughnut Chart) =====
+    const categoryCtx = document.getElementById('categorySalesChart').getContext('2d');
+    const categorySalesChart = new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: @Html.Raw(Json.Serialize(ViewBag.CategoryLabels)),
+            datasets: [{
+                data: @Html.Raw(Json.Serialize(ViewBag.CategorySalesData)),
+                backgroundColor: [
+                    '#7b2ff7', '#4facfe', '#11998e', '#38ef7d',
+                    '#ff416c', '#ff4b2b', '#f59e0b', '#8b5cf6'
+                ],
+                borderWidth: 0,
+                hoverOffset: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            let value = context.parsed || 0;
+                            let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            let percentage = ((value / total) * 100).toFixed(1);
+                            return label + ': ' + value + ' sold (' + percentage + '%)';
+                        }
+                    }
+                }
+            },
+            cutout: '65%'
+        }
+    });
+
+    // ===== CHART 2: User Growth (Line Chart) =====
+    const userCtx = document.getElementById('userGrowthChart').getContext('2d');
+    const userGrowthChart = new Chart(userCtx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Json.Serialize(ViewBag.UserGrowthLabels)),
+            datasets: [{
+                label: 'Total Users',
+                data: @Html.Raw(Json.Serialize(ViewBag.UserGrowthData)),
+                borderColor: '#11998e',
+                backgroundColor: 'rgba(17, 153, 142, 0.1)',
+                borderWidth: 3,
+                pointBackgroundColor: '#11998e',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'Total Users: ' + context.parsed.y;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: { size: 11 },
+                        color: '#6b7280'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: { size: 11 },
+                        color: '#6b7280'
+                    }
+                }
+            }
+        }
+    });
+</script>

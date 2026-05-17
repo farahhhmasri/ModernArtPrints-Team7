@@ -1,0 +1,202 @@
+﻿@model ModernArtPrints.Models.Product
+
+@{
+    ViewData["Title"] = "Edit Product";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid py-5">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+        <div>
+            <h2 class="fw-bold mb-0 text-dark">Product Settings</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Products</a></li>
+                    <li class="breadcrumb-item active">Edit Product</li>
+                </ol>
+            </nav>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-4">
+            <!-- Left Side: Main Form Table -->
+            <div class="col-xl-8">
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <div class="card-header bg-dark py-3">
+                        <h5 class="card-title mb-0 text-white"><i class="bi bi-info-circle me-2"></i>General Information</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table align-middle mb-0">
+                            <tbody>
+                                <tr class="border-bottom">
+                                    <th scope="row" class="bg-light ps-4 py-4" width="30%">
+                                        <label asp-for="Name" class="h6 mb-0 fw-bold"></label>
+                                        <div class="small text-muted fw-normal mt-1">The public name of the product.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <input asp-for="Name" class="form-control form-control-lg border-0 shadow-none" placeholder="e.g. Abstract Painting" />
+                                        <span asp-validation-for="Name" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th scope="row" class="bg-light ps-4 py-4">
+                                        <label asp-for="Description" class="h6 mb-0 fw-bold"></label>
+                                        <div class="small text-muted fw-normal mt-1">A brief summary of the product.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <textarea asp-for="Description" class="form-control border-0 shadow-none" rows="4" placeholder="Describe this product..."></textarea>
+                                        <span asp-validation-for="Description" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th scope="row" class="bg-light ps-4 py-4">
+                                        <label asp-for="Price" class="h6 mb-0 fw-bold"></label>
+                                        <div class="small text-muted fw-normal mt-1">The selling price of the product.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <input asp-for="Price" class="form-control form-control-lg border-0 shadow-none" placeholder="e.g. 99.99" />
+                                        <span asp-validation-for="Price" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th scope="row" class="bg-light ps-4 py-4">
+                                        <label asp-for="DiscountId" class="h6 mb-0 fw-bold">Discount</label>
+                                        <div class="small text-muted fw-normal mt-1">Applied discount code.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <select asp-for="DiscountId" class="form-select form-select-lg border-0 shadow-none" asp-items="ViewBag.DiscountId">
+                                            <option value="">-- No Discount --</option>
+                                        </select>
+                                        <span asp-validation-for="DiscountId" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th scope="row" class="bg-light ps-4 py-4">
+                                        <label asp-for="StockQuantity" class="h6 mb-0 fw-bold"></label>
+                                        <div class="small text-muted fw-normal mt-1">Available units in inventory.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <input asp-for="StockQuantity" class="form-control form-control-lg border-0 shadow-none" placeholder="e.g. 100" />
+                                        <span asp-validation-for="StockQuantity" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th scope="row" class="bg-light ps-4 py-4">
+                                        <label asp-for="CategoryId" class="h6 mb-0 fw-bold">Category</label>
+                                        <div class="small text-muted fw-normal mt-1">Product classification.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <select asp-for="CategoryId" class="form-select form-select-lg border-0 shadow-none" asp-items="ViewBag.CategoryId">
+                                            <option value="">-- Select Category --</option>
+                                        </select>
+                                        <span asp-validation-for="CategoryId" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                                <tr class="border-bottom">
+                                    <th scope="row" class="bg-light ps-4 py-4">
+                                        <label asp-for="IsActive" class="h6 mb-0 fw-bold"></label>
+                                        <div class="small text-muted fw-normal mt-1">Whether this product is visible in store.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" asp-for="IsActive" style="width: 3em; height: 1.5em;">
+                                        </div>
+                                        <span asp-validation-for="IsActive" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="bg-light ps-4 py-4">
+                                        <label asp-for="CreatedAt" class="h6 mb-0 fw-bold"></label>
+                                        <div class="small text-muted fw-normal mt-1">When this product was added.</div>
+                                    </th>
+                                    <td class="pe-4">
+                                        <input asp-for="CreatedAt" class="form-control form-control-lg border-0 shadow-none" readonly />
+                                        <span asp-validation-for="CreatedAt" class="text-danger small ms-2"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer bg-white border-top-0 py-4 ps-4">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                            <i class="bi bi-save me-2"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Image & Media Management -->
+            <div class="col-xl-4">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white py-3">
+                        <h5 class="card-title mb-0"><i class="bi bi-image me-2"></i>Media</h5>
+                    </div>
+                    <div class="card-body text-center py-4">
+                        <label class="d-block mb-3 fw-bold text-muted text-uppercase small">Currently Displayed</label>
+                        <div class="position-relative d-inline-block mb-4">
+                            @{
+                                var imageUrl = Model?.MainImageUrl;
+                            }
+                            @if (!string.IsNullOrEmpty(imageUrl))
+                            {
+                                <img src="~/uploads/@imageUrl"
+                                     class="img-thumbnail shadow-sm"
+                                     style="width: 180px; height: 180px; object-fit: cover; border-radius: 12px;"
+                                     alt="Current Product Image"
+                                     onerror="this.onerror=null; this.src='~/images/no-image.png';" />
+                            }
+                            else
+                            {
+                                <div class="bg-light d-flex align-items-center justify-content-center"
+                                     style="width: 180px; height: 180px; border-radius: 12px;">
+                                    <i class="bi bi-image fs-1 text-muted opacity-25"></i>
+                                </div>
+                            }
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success border border-light">
+                                Active
+                            </span>
+                        </div>
+
+                        <div class="text-start mt-2">
+                            <label class="form-label fw-bold">Update Product Image</label>
+                            <input type="file" name="MainImageFile" class="form-control" id="customFile" />
+                            <div class="form-text mt-2">
+                                <i class="bi bi-info-circle-fill me-1"></i> Recommended: 800x800px (JPG, PNG)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+
+    .form-control:focus {
+        background-color: #fff;
+        border-color: #dee2e6;
+        box-shadow: none;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: 1.5rem 0.75rem;
+    }
+</style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
